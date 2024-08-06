@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Pool" ADD COLUMN "apyPct1D" DECIMAL;
+ALTER TABLE "Pool" ADD COLUMN "apyPct7D" DECIMAL;

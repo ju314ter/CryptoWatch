@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+// NextAuth models
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String?         @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  createdLists  List[]
+  createdAlerts  Alert[]
+  followedLists List[]          @relation("UserFollows")
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Pools model
+model Pool {
+  id           String   @id @default(cuid())
+  name         String
+  protocol     String
+  blockchain   String
+  tvl          BigInt?
+  url          String? @unique
+  apy          Decimal?
+  apyPct1D     Decimal?
+  apyPct7D     Decimal?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lists     List[]
+}
+
+// List model
+model List {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  pools     Pool[]
+  followers User[]   @relation("UserFollows")
+  creator   User     @relation(fields: [creatorId], references: [id])
+  creatorId String
+  meanRating    Int      @default(0)
+  nbVotes   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Alert model (type = pool | list; recurrence = once | daily | weekly | monthly; targetKpi = apy | tvl | ...)
+model Alert {
+  id        String   @id @default(cuid())
+  type      String
+  name      String
+  message   String
+  expiration DateTime 
+  recurrence String
+  targetKpi  String
+  delay     Int
+  lowValue  Int
+  highValue Int
+  creator   User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
