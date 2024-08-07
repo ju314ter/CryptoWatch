@@ -26,9 +26,10 @@ export default function RootLayout({
           "bg-background transition-all overflow-hidden"
         )}
       >
-        <Spotlight fill="#74481F" />
+        <Spotlight fill="#74481F" className="transparent-element" />
         <main className="z-10">{children}</main>
         <div
+          className="transparent-element"
           style={{
             position: "absolute",
             top: "20%",

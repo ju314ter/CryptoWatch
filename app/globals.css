@@ -87,3 +87,6 @@
   margin-right: auto;
   margin-left: auto;
 }
+.transparent-element {
+  pointer-events: none;
+}

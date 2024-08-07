@@ -19,7 +19,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CirclePlus, MinusCircle, PlusCircle } from "lucide-react";
+import {
+  BadgeMinus,
+  CirclePlus,
+  CrossIcon,
+  Delete,
+  DeleteIcon,
+  MinusCircle,
+  PlusCircle,
+} from "lucide-react";
 import CreateListForm from "@/components/form/createListForm";
 import { deleteList, fetchUserLists } from "./actions";
 import { useEffect, useState } from "react";
@@ -127,8 +135,8 @@ export default function DashboardPage() {
             Visualisation
           </div>
         </div>
-        <div className="flex">
-          <Table className="w-[100%] border-md">
+        <div className="flex w-full h-full">
+          <Table className="border-md h-full">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Ticker</TableHead>
@@ -171,37 +179,41 @@ export default function DashboardPage() {
                     </TableCell>
                     <TableCell>{pool.tvl}</TableCell>
 
-                    <TableCell className={"flex justify-end items-center"}>
-                      ...
+                    <TableCell className={"text-center"}>
+                      <div className="hover:text-accent cursor-pointer flex justify-end items-center">
+                        <BadgeMinus />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={6} className="text-center">
-                  <Input
-                    placeholder="Enter pool URL or ID"
-                    className="w-full"
-                  />
-                </TableCell>
-                <TableCell colSpan={2} className="text-center">
-                  <Button
-                    variant="outline"
-                    className="w-42 justify-center gap-2"
-                  >
-                    <CirclePlus className="h-4 w-4 duration-0" />
-                    Add pools to a custom list
-                  </Button>
-                </TableCell>
-              </TableRow>
-            </TableFooter>
+            {selectedList && (
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center">
+                    <Input
+                      placeholder="Enter pool URL or ID"
+                      className="w-full"
+                    />
+                  </TableCell>
+                  <TableCell colSpan={2} className="text-center">
+                    <Button
+                      variant="outline"
+                      className="w-42 justify-center gap-2"
+                    >
+                      <CirclePlus className="h-4 w-4 duration-0" />
+                      Add pools to a custom list
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            )}
           </Table>
         </div>
       </div>
       <div className="flex flex-col justify-between basis-1 gap-5">
         <div className="h-20 bg-[#2A2A2A] bg-opacity-20 backdrop-blur-xl border border-primary flex justify-center items-center w-[25vw] min-w-[320px] rounded-[20px]">
-          <p>Toast</p>
+          <p>Alarm card stack</p>
         </div>
         <div className="h-[50vh] bg-[#2A2A2A] grow bg-opacity-20 backdrop-blur-xl border border-primary flex justify-center items-center min-w-[320px] rounded-[20px]">
           <p>Alert Module</p>
